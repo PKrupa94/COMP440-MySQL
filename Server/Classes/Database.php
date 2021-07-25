@@ -2,10 +2,10 @@
 
 class Database{
 
-    private $db_host = 'localhost';
-    private $db_name = 'comp440_project';
-    private $db_username = 'root';
-    private $db_password = 'root';
+    private $db_host = "localhost";
+    private $db_name = "comp440_project";
+    private $db_username = "root";
+    private $db_password = "root";
 
     public function dbConnection() {
 
