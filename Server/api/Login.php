@@ -10,9 +10,13 @@
   require __DIR__."/../classes/JwtHandler.php";
 
   $db = new Database();
-  $conn = $db -> dbConnection();
+  $conn = $db -> dbConn();
 
   $inputData = json_decode( file_get_contents( "php://input" ) );
+
+  $email = trim( $inputData -> email );
+  $password = trim( $inputData -> password );
+
   $outputMsg = [];
 
   function msg( $isSuccess, $status, $msg, $optional = [] ) {
@@ -26,15 +30,12 @@
   if( $_SERVER[ "REQUEST_METHOD" ] != "POST" ) {
 
       $outputMsg = msg( 0, 404, "Error: Page Not Found." );
-  } else if( !isset( $inputData -> email ) || !isset( $inputData -> password )
-          || empty( trim( $inputData -> email ) ) || empty( trim( $inputData -> password ) ) ) {
+  } else if( !isset( $email ) || !isset( $password )
+           || empty( $email ) || empty( $password ) ) {
 
       $fields = [ "fields" => [ "email", "password" ] ];
       $outputMsg = msg( 0, 422, "Error: Please enter a valid email and password.", $fields );
   } else {
-
-      $email = trim( $inputData -> email );
-      $password = trim( $inputData -> password );
 
       if( !filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
 
@@ -43,17 +44,15 @@
 
           try{
 
-              $emailSelectStmt = "SELECT * FROM `users` WHERE `email` = :email";
-              $emailQuery = $conn -> prepare( $emailSelectStmt );
-              $emailQuery -> bindValue( ":email", $email, PDO::PARAM_STR );
-              $emailQuery -> execute();
+              $emailSelect = $conn -> prepare( "SELECT * FROM `users` WHERE `email` = :email" );
+              $emailSelect -> bindValue( ":email", $email, PDO::PARAM_STR );
+              $emailSelect -> execute();
 
-              if( $emailQuery -> rowCount() ) {
+              if( $emailSelect -> rowCount() == 1 ) { // user found
 
-                  $row = $emailQuery -> fetch( PDO::FETCH_ASSOC );
-                  $verifyPass = password_verify( $password, $row[ "password" ] );
+                  $row = $emailSelect -> fetch( PDO::FETCH_ASSOC );
 
-                  if( $verifyPass ) {
+                  if( password_verify( $password, $row[ "password" ] ) ) {
 
                       $jwt = new JwtHandler();
 
@@ -78,7 +77,7 @@
                   $outputMsg = msg( 0, 422, "Error: Invalid Email Address." );
               }
 
-          } catch( PDOException $e ) {
+          } catch( Exception $e ) {
 
               $outputMsg = msg( 0, 500, $e -> getMessage() );
           }

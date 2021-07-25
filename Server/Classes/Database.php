@@ -2,21 +2,23 @@
 
 class Database{
 
-    private $db_host = "localhost";
-    private $db_name = "comp440_project";
-    private $db_username = "root";
-    private $db_password = "root";
+    private $DATABASE_HOST = "localhost";
+    private $DATABASE_NAME = "comp440_project";
+    private $DATABASE_USER = "root";
+    private $DATABASE_PASSWORD = "root";
 
-    public function dbConnection() {
+    public function dbConn() {
 
         try {
 
-            $conn = new PDO('mysql:host='.$this -> db_host.';dbname='.$this -> db_name, $this -> db_username, $this -> db_password) ;
+            $conn = new PDO('mysql:host='.$this -> DATABASE_HOST.';dbname='.$this -> DATABASE_NAME,
+                                          $this -> DATABASE_USER,           $this -> DATABASE_PASSWORD);
             $conn -> setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-            return $conn;
-        } catch( PDOException $e ) {
 
-            echo "Connection error ".$e -> getMessage();
+            return $conn;
+        } catch( Exception $e ) {
+
+            echo "Error: Could not connect- ".$e -> getMessage();
             exit;
         }
     }

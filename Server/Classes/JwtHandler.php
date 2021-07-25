@@ -1,9 +1,6 @@
 <?php
 
   require __DIR__."/../jwt/JWT.php";
-  require __DIR__."/../jwt/ExpiredException.php";
-  require __DIR__."/../jwt/SignatureInvalidException.php";
-  require __DIR__."/../jwt/BeforeValidException.php";
 
   use \Firebase\JWT\JWT;
 
@@ -20,7 +17,7 @@
           date_default_timezone_set( "America/Los_Angeles" );
 
           $this -> issuedAt = time();
-          $this -> expiredAt = $this -> issuedAt + 3600;
+          $this -> expiredAt = $this -> issuedAt + 1800;
           $this -> jwtPass = "mysql12345";
       }
 
@@ -41,14 +38,14 @@
 
       function errMsg( $msg ) {
 
-          return [ "auth" => 0, "message" => $msg ];
+          return [ "Authorization" => 0, "Message" => $msg ];
       }
 
       function _jwt_decode_data( $jwtToken ) {
 
           try {
               $decode = JWT::decode( $jwtToken, $this -> jwtPass, array( "HS256" ) );
-              return [ "auth" => 1, "data" => $decode -> data ];
+              return [ "Authorization" => 1, "Data" => $decode -> data ];
 
           } catch( Exception $e ) {
 
