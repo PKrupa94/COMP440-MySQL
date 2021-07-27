@@ -4,8 +4,8 @@ class Database{
 
     private $DATABASE_HOST = "localhost";
     private $DATABASE_NAME = "comp440_project";
-    private $DATABASE_USER = "root";
-    private $DATABASE_PASSWORD = "root";
+    private $DATABASE_USER = "UserComp440";
+    private $DATABASE_PASSWORD = "mysql12345";
 
     public function dbConn() {
 
