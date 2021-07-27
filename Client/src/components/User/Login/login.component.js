@@ -16,7 +16,7 @@ function Login(props) {
         console.log('sign in click')
 
         //Need to change url
-        axios.post('http://localhost:6004/api/login', {
+        axios.post('http://localhost/COMP440/Server/api/Login.php', {
             username: state.userName,
             password: state.password
         }).then(response => {

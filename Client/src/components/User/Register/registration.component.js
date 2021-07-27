@@ -33,7 +33,7 @@ function Signup(props) {
             //API call
 
             //Need to change url
-            axios.post('http://localhost:6004/api/register', {
+            axios.post('http://localhost/COMP440/Server/api/Register.php', {
                 firstname: state.firstName,
                 lastname: state.lastName,
                 username: state.userName,
