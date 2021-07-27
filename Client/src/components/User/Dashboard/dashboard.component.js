@@ -2,7 +2,7 @@ import React from 'react'
 import { Redirect } from 'react-router-dom';
 
 
-function dashboard() {
+function dashboard(props) {
 
     if (sessionStorage.getItem('isUserLogin') === null) {
         return <Redirect to="/sign-in" />;
@@ -10,7 +10,7 @@ function dashboard() {
 
     return (
         <div>
-            <h3>Welcome to home page</h3>
+            <h3>Welcome {props.location.state.username}!!</h3>
         </div>
     )
 }

@@ -8,12 +8,15 @@ function Login(props) {
         userName: '',
         password: ''
     })
+    const [validationError, setValidationError] = useState({
+        isError: false,
+        message: ''
+    })
 
     const context = useContext(AuthContext)
 
     const signInHandler = (event) => {
         event.preventDefault();
-        console.log('sign in click')
 
         //Need to change url
         axios.post('http://localhost/COMP440/Server/api/Login.php', {
@@ -21,11 +24,15 @@ function Login(props) {
             password: state.password
         }).then(response => {
             const data = response['data']
+            console.log('data', data)
             if (data['Is Success'] == 0) {
-                alert(data['Message'])
+                setValidationError({
+                    isError: true,
+                    message: data['Message']
+                })
             } else {
                 context.onLogin()
-                props.history.push('/')
+                props.history.push('/', { username: data['username'] })
             }
         }).catch(error => {
             console.log(error)
@@ -36,6 +43,10 @@ function Login(props) {
         <div>
             <form onSubmit={signInHandler}>
                 <h3>Sign In</h3>
+                {validationError.isError ?
+                    <div class="alert alert-danger" role="alert">
+                        {validationError.message}
+                    </div> : ''}
                 <div className="form-group mb-3">
                     <label>Username</label>
                     <input type="text"

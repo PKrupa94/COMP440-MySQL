@@ -54,7 +54,8 @@ header( "Content-Type: application/json; charset=UTF-8" );
                       $outputMsg = [
                           "Is Success" => 1,
                           "Message" => "You have successfully logged in.",
-                          "Token" => $token
+                          "Token" => $token,
+                          "username" => $username
                       ];
 
                     } else {

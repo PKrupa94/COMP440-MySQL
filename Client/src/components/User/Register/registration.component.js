@@ -16,12 +16,13 @@ function Signup(props) {
 
     const context = useContext(AuthContext)
 
-
-
-
     //handle usedata
     const [state, setNewState] = useState({ initialState })
     const [error, setError] = useState('')
+    const [validationError, setValidationError] = useState({
+        isError: false,
+        message: ''
+    })
 
     //signup click
     const signUpHandler = (event) => {
@@ -41,8 +42,16 @@ function Signup(props) {
                 password: state.password
             }).then(response => {
                 console.log('response', response)
-                context.onLogin()
-                props.history.push('/')
+                const data = response['data']
+                if (data['Is Success'] == 0) {
+                    setValidationError({
+                        isError: true,
+                        message: data['Message']
+                    })
+                } else {
+                    context.onLogin()
+                    props.history.push('/')
+                }
             }).catch(error => {
                 console.log(error)
             })
@@ -53,6 +62,10 @@ function Signup(props) {
         <div>
             <form onSubmit={signUpHandler}>
                 <h3>Sign Up</h3>
+                {validationError.isError ?
+                    <div class="alert alert-danger" role="alert">
+                        {validationError.message}
+                    </div> : ''}
                 <div className="form-group mb-3">
                     <label>First name</label>
                     <input type="text"
