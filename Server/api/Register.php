@@ -8,6 +8,7 @@
 
   require __DIR__."/../classes/Database.php";
 
+  //database connection
   $db = new Database();
   $conn = $db -> dbConn();
 
@@ -33,25 +34,20 @@
   }
 
   if( $_SERVER[ "REQUEST_METHOD" ] != "POST" ) {
-
       $outputMsg = msg( 0, 404, "Error: Page not found." );
+  //check for missing form fields
   } else if( !isset( $firstname ) || !isset( $lastname ) || !isset( $username ) || !isset( $email ) || !isset( $password )
           || empty( $firstname ) || empty( $lastname ) || empty( $username )  || empty( $email ) || empty( $password ) ) {
-
       $fields = [ "fields" => [ "firstname", "lastname", "username", "email", "password" ] ];
       $outputMsg = msg( 0, 422, "Error: Please fill out entire form.", $fields );
   } else {
-
       // make sure password is the same as the hashed password in the table
       $password = password_hash( $password, PASSWORD_DEFAULT );
-
+      //email validation
       if( !filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
-
           $outputMsg = msg( 0, 422, "Error: Invalid email." );
       } else {
-
           try {
-
               $usernameCount = $conn -> prepare( "SELECT `username` FROM `users` WHERE `username`=:username" );
               $emailCount = $conn -> prepare( "SELECT `email` FROM `users` WHERE `email`=:email" );
 
@@ -60,33 +56,26 @@
               $usernameCount -> execute();
               $emailCount -> execute();
 
+              //if use alredy register return error
               if( $usernameCount -> rowCount() != 0 ) {
-
                   $outputMsg = msg( 0, 422, "Error: Username already exists." );
 
               } else if( $emailCount -> rowCount() != 0 ) {
-
                   $outputMsg = msg( 0, 422, "Error: Email already exists." );
 
               } else {
-
                   $insertUser = $conn -> prepare( "INSERT INTO `users`(`firstname`, `lastname`, `username`, `email`, `password`)
                                                    VALUES(:firstname, :lastname, :username, :email, :password)" );
-
                   $insertUser -> bindValue( ":firstname", $firstname, PDO::PARAM_STR );
                   $insertUser -> bindValue( ":lastname",  $lastname,  PDO::PARAM_STR );
                   $insertUser -> bindValue( ":username",  $username,  PDO::PARAM_STR );
                   $insertUser -> bindValue( ":email",     $email,     PDO::PARAM_STR );
                   $insertUser -> bindValue( ":password",  $password,  PDO::PARAM_STR );
-
                   $insertUser -> execute();
-
                   $outputMsg = msg( 1, 201, "User successfully registered." );
 
               }
-
           } catch( Exception $e ) {
-
               $outputMsg = msg( 0, 500, $e -> getMessage() );
           }
       }

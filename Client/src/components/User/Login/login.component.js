@@ -20,9 +20,13 @@ function Login(props) {
             username: state.userName,
             password: state.password
         }).then(response => {
-            console.log('response', response)
-            context.onLogin()
-            props.history.push('/')
+            const data = response['data']
+            if (data['Is Success'] == 0) {
+                alert(data['Message'])
+            } else {
+                context.onLogin()
+                props.history.push('/')
+            }
         }).catch(error => {
             console.log(error)
         })

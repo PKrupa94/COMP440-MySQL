@@ -13,7 +13,7 @@ header( "Content-Type: application/json; charset=UTF-8" );
 
   $inputData = json_decode( file_get_contents( "php://input" ) );
 
-  $email = trim( $inputData -> email );
+  $username = trim( $inputData -> username );
   $password = trim( $inputData -> password );
 
   $outputMsg = [];
@@ -27,29 +27,20 @@ header( "Content-Type: application/json; charset=UTF-8" );
   }
 
   if( $_SERVER[ "REQUEST_METHOD" ] != "POST" ) {
-
       $outputMsg = msg( 0, 404, "Error: Page Not Found." );
-  } else if( !isset( $email ) || !isset( $password )
-           || empty( $email ) || empty( $password ) ) {
-
-      $fields = [ "fields" => [ "email", "password" ] ];
-      $outputMsg = msg( 0, 422, "Error: Please enter a valid email and password.", $fields );
+  } else if( !isset( $username ) || !isset( $password )
+           || empty( $username ) || empty( $password ) ) {
+      $fields = [ "fields" => [ "username", "password" ] ];
+      $outputMsg = msg( 0, 422, "Error: Please enter username and password!!", $fields );
   } else {
-
-      if( !filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
-
-          $outputMsg = msg( 0, 422, "Error: Invalid Email Address." );
-      } else {
-
           try{
+              $userselect = $conn -> prepare( "SELECT * FROM `users` WHERE `username` = :username" );
+              $userselect -> bindValue( ":username", $username, PDO::PARAM_STR );
+              $userselect -> execute();
+              //username exist then look for password 
+              if( $userselect -> rowCount() == 1 ) {
 
-              $emailSelect = $conn -> prepare( "SELECT * FROM `users` WHERE `email` = :email" );
-              $emailSelect -> bindValue( ":email", $email, PDO::PARAM_STR );
-              $emailSelect -> execute();
-
-              if( $emailSelect -> rowCount() == 1 ) { // user found
-
-                  $row = $emailSelect -> fetch( PDO::FETCH_ASSOC );
+                  $row = $userselect -> fetch( PDO::FETCH_ASSOC );
 
                   if( password_verify( $password, $row[ "password" ] ) ) {
 
@@ -67,22 +58,18 @@ header( "Content-Type: application/json; charset=UTF-8" );
                       ];
 
                     } else {
-
+                      //password does not match return error
                       $outputMsg = msg( 0, 422, "Error: Invalid Password." );
                     }
 
               } else {
-
-                  $outputMsg = msg( 0, 422, "Error: Invalid Email Address." );
+                  //if username invalid return error
+                  $outputMsg = msg( 0, 422, "Error: Invalid Username." );
               }
 
           } catch( Exception $e ) {
-
               $outputMsg = msg( 0, 500, $e -> getMessage() );
           }
-        }
       }
-
   echo json_encode( $outputMsg );
-
 ?>
