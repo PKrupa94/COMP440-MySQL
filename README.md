@@ -10,6 +10,9 @@
 
 ##Usage
 
+```
 > Put project folder into htdocs directory of xampp
 > Go to client directory from terminal and do ``` npm start ``` to run clinet
 > For server start Xampp and replace client API url with your local API url
+
+```
