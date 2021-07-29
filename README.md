@@ -1,6 +1,6 @@
 # COMP440
 
-##Prerequisities
+## Prerequisities
 
 ```
 1) install npm in your system(https://nodejs.org/en/download/)
@@ -8,7 +8,7 @@
 
 ```
 
-##Usage
+## Usage
 
 ```
 > Put project folder into htdocs directory of xampp
