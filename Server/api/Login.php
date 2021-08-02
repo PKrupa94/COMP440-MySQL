@@ -4,7 +4,7 @@ header( "access-control-allow-credentials: true" );
 header("Access-Control-Allow-Headers: X-Requested-With, Content-Type, Origin, Cache-Control, Pragma, Authorization, Accept, Accept-Encoding");
 header('Access-Control-Allow-Methods: GET, POST');
 header( "Content-Type: application/json; charset=UTF-8" );
-
+//
   require __DIR__."/../classes/Database.php";
   require __DIR__."/../classes/JwtHandler.php";
 
@@ -37,7 +37,7 @@ header( "Content-Type: application/json; charset=UTF-8" );
               $userselect = $conn -> prepare( "SELECT * FROM `users` WHERE `username` = :username" );
               $userselect -> bindValue( ":username", $username, PDO::PARAM_STR );
               $userselect -> execute();
-              //username exist then look for password 
+              //username exist then look for password
               if( $userselect -> rowCount() == 1 ) {
 
                   $row = $userselect -> fetch( PDO::FETCH_ASSOC );
