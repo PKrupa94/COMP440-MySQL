@@ -1,0 +1,17 @@
+.alert-success .btn-success {
+    float: right;
+  }
+  
+  .alert-success span {
+    line-height: 34px;
+  }
+  
+  .alert-success > div:after {
+    clear: both;
+    content: '';
+    display: table;
+}
+
+.blog-alert-success{
+    margin:auto;
+}

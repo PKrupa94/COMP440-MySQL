@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react'
 import axios from 'axios'
 import AuthContext from '../../../AuthContext'
+import './registration.css'
 
 
 function Signup(props) {
@@ -43,7 +44,7 @@ function Signup(props) {
             }).then(response => {
                 console.log('response', response)
                 const data = response['data']
-                if (data['Is Success'] == 0) {
+                if (data['Is Success'] === 0) {
                     setValidationError({
                         isError: true,
                         message: data['Message']
@@ -57,9 +58,8 @@ function Signup(props) {
             })
         }
     }
-
     return (
-        <div>
+        <div className="auth-inner">
             <form onSubmit={signUpHandler}>
                 <h3>Sign Up</h3>
                 {validationError.isError ?

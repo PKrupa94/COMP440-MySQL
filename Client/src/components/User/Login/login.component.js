@@ -25,7 +25,7 @@ function Login(props) {
         }).then(response => {
             const data = response['data']
             console.log('data', data)
-            if (data['Is Success'] == 0) {
+            if (data['Is Success'] === 0) {
                 setValidationError({
                     isError: true,
                     message: data['Message']
@@ -40,7 +40,7 @@ function Login(props) {
     }
 
     return (
-        <div>
+        <div className="auth-inner">
             <form onSubmit={signInHandler}>
                 <h3>Sign In</h3>
                 {validationError.isError ?
