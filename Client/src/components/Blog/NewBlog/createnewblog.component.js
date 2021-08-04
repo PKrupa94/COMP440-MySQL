@@ -19,18 +19,23 @@ function CreateNewBlog(props) {
         console.log('subject', newBlogState.subject)
         console.log('description', newBlogState.description)
         console.log('tags', newBlogState.tags)
-        setSuccess(true)
         //setup api call
-        // axios.post('', {
-        //     subject: newBlogState.subject,
-        //     description: newBlogState.description,
-        //     tag: newBlogState.tags
-        // }).then(response => {
-        //     console.log('response', response)
+        axios.post('http://localhost/COMP440/Server/api/PostBlog.php', {
+            subject: newBlogState.subject,
+            description: newBlogState.description,
+            tags: newBlogState.tags
+        }).then(response => {
+            const data = response['data']
+            console.log('data', data)
+            if (data['Is Success'] === 0) {
+                alert(data['Message'])
+            } else {
+                setSuccess(true)
+            }
 
-        // }).catch(error => {
-        //     console.log('error', error)
-        // })
+        }).catch(error => {
+            console.log('error', error)
+        })
 
     }
 
