@@ -37,7 +37,7 @@
                 $bloglist[] = $row;
             }
 
-            $outputMsg = msg( 1, 1, "Successfully retrieved blogs." );
+            $outputMsg = msg( 1, 201, "Successfully retrieved blogs." );
 
             $outputMsg[] = $bloglist;
 
