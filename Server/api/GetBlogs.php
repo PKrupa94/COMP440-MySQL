@@ -39,7 +39,7 @@
 
             $outputMsg = msg( 1, 1, "Successfully retrieved blogs." );
 
-            $outputMsg[] = $bloglist;
+            $outputMsg['blogslist'] = $bloglist;
 
           } else {
 
