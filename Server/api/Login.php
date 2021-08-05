@@ -59,7 +59,8 @@
                           "Is Success" => 1,
                           "Message" => "You have successfully logged in.",
                           "Token" => $token,
-                          "username" => $username
+                          "username" => $username,
+                          "userid" => $row[ "userid" ]
                       ];
 
                     } else {

@@ -74,8 +74,13 @@
                   $insertUser -> bindValue( ":email"    , $email    , PDO::PARAM_STR );
                   $insertUser -> bindValue( ":password" , $password , PDO::PARAM_STR );
                   $insertUser -> execute();
-                  $outputMsg = msg( 1, 201, "User successfully registered." );
 
+                  $userID = $conn -> query( "SELECT `userid` FROM `users` WHERE `username` = '$username'" );
+                  $userID -> execute();
+
+                  $userID = $userID -> fetch( PDO::FETCH_ASSOC );
+
+                  $outputMsg = msg( 1, 201, "User successfully registered.", $userID );
               }
           } catch( Exception $e ) {
 
