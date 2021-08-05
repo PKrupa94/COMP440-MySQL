@@ -36,8 +36,8 @@ function Dashboard(props) {
     }
 
 
-    const blogClickHandler = (subject, description) => {
-        props.history.push('/detailblog', { subject: subject, description: description })
+    const blogClickHandler = (subject, description, blogid) => {
+        props.history.push('/detailblog', { subject: subject, description: description, blogid: blogid })
     }
 
     if (sessionStorage.getItem('isUserLogin') === null) {
@@ -56,7 +56,7 @@ function Dashboard(props) {
                             blogState && blogState.map((blog, index) => {
                                 return (
                                     <tr key={index}>
-                                        <td onClick={() => blogClickHandler(blog.subject, blog.description)}>
+                                        <td onClick={() => blogClickHandler(blog.subject, blog.description, blog.blogid)}>
                                             <ListBlog subject={blog.subject} description={blog.description} />
                                         </td>
                                     </tr>

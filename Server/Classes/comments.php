@@ -1,79 +1,52 @@
 <?php
-include "config.php";
+  header( "Access-Control-Allow-Origin: *" );
+  header( "Access-control-Allow-credentials: true" );
+  header( "Access-Control-Allow-Headers: X-Requested-With, Content-Type, Origin, Cache-Control, Pragma, Authorization, Accept, Accept-Encoding" );
+  header( "Access-Control-Allow-Methods: GET, POST" );
+  header( "Content-Type: application/json; charset=UTF-8" );
 
-if(!isset($_GET['blogid']))
-{
-    echo "Please provide blogid";
-    return;
-}
-$blogid = $_GET['blogid'];
+  require __DIR__."/../classes/Database.php";
 
+  $db = new Database();
+  $conn = $db -> dbConn();
 
-if(!isset($_GET['posted_by']))
-{
-    echo "Please provide user";
-    return;
-}
-$posted_by = $_GET['posted_by'];
+  $inputData = json_decode( file_get_contents( "php://input" ) );
 
+  // turn special chars into html-friendly characters
+  // and also strip html/php tags from the non-empty input data
+  $sentiment = htmlspecialchars( strip_tags( trim( $inputData -> sentiment ) ) );
+  $description = htmlspecialchars( strip_tags( trim( $inputData -> description ) ) );
+  $blogid = htmlspecialchars( strip_tags( trim( $inputData -> blogid ) ) );
+  $authorid = htmlspecialchars( strip_tags( trim( $inputData -> authorid )));
 
-if(isset($_POST['save']))
-{
-    $sentiment = $_POST['sentiment'];
-    $description = $_POST['description'];
-    $cdate = date("Y-m-d");
+  $outputMsg = [];
 
-    mysqli_query($conn, "INSERT INTO `comments`(`sentiment`, `description`, `cdate`, `blogid`, `posted_by`) 
-                                        VALUES ('$sentiment', '$description', '$cdate', '$blogid', '$posted_by')");
-}
+  function msg( $isSuccess, $status, $msg, $optional = [] ) {
+    return array_merge( [
+      "Is Success" => $isSuccess, // 0 for false, 1 for true
+      "Status" => $status, // status code
+      "Message" => $msg
+    ], $optional );
+  }
 
+  if( $_SERVER[ "REQUEST_METHOD" ] != "POST" ) {
+      $outputMsg = msg( 0, 404, "Error: Page not found." );
+  }  else {
+          try {
+                  $insertComment = $conn -> prepare("INSERT INTO `comments`(`sentiment`, `description`, `blogid`, `authorid`)
+                                                   VALUES(:sentiment, :description, :blogid, :authorid)");
+                  $insertComment -> bindValue( ":sentiment", $sentiment, PDO::PARAM_STR );
+                  $insertComment -> bindValue( ":description" ,$description , PDO::PARAM_STR );
+                  $insertComment -> bindValue( ":blogid" , $blogid, PDO::PARAM_STR );
+                  $insertComment -> bindValue( ":authorid" , $authorid, PDO::PARAM_STR );
+                  $insertComment -> execute();
+                  $outputMsg = msg( 1, 201, "Comment is succesfully added");
+              
+          } catch( Exception $e ) {
 
+              $outputMsg = msg( 0, 500, $e -> getMessage() );
+          }
+      }
+  echo json_encode( $outputMsg );
 
-$blog = mysqli_query($conn, "SELECT * FROM `blogs` where blogid='$blogid'");
-$blog = mysqli_fetch_assoc($blog);
-if(!isset($blog['blogid']))
-{
-    echo "No record exists";
-    return;
-}
-
-echo "<h3>" . $blog['subject'] . "</h3>";
-echo "<p>" . $blog['description'] . "</p>";
-
-echo "<h4> Comments </h4>";
-
-$url = $site_url . 'getComments.php?blogid='. $blogid;
-$comments = json_decode(file_get_contents($url));
-foreach($comments as $com)
-{
-    echo "<div style='background: lightgrey; margin: 5px; border-radius: 10px; padding: 12px'>";
-        echo "<b> User : </b>" . $com->posted_by . "<br>";
-        echo "<b> Sentiment : </b>" . $com->sentiment . "<br>";
-        echo $com->description . "<br>";
-        echo "<b> Date : </b>" . $com->cdate . "<br>";
-    echo "</div>";
-}
 ?>
-
-<form action="" method="POST">
-<table>
-<tr>
-    <th>Sentiment : </th>
-    <td>
-        <select name="sentiment" required style="width: 380px;">
-            <option value="">Select Sentiment</option>
-            <option value="negative">Negative</option>
-            <option value="positive">Postive</option>
-        </select>
-    </td>
-</tr>
-<tr>
-    <th>Comment : </th>
-    <td><textarea name="description"cols="50" rows="10" required></textarea></td>
-</tr>
-<tr>
-    <th></th>
-    <td> <input type="submit" name="save" value="Post"></td>
-</tr>
-</table>
-</form>
