@@ -8,7 +8,7 @@ function CreateNewBlog(props) {
     const newBlogInitialState = {
         subject: '',
         description: '',
-        tags: []
+        tags: ''
     }
 
     const [newBlogState, setNewBlogState] = useState(newBlogInitialState)
@@ -68,7 +68,7 @@ function CreateNewBlog(props) {
                     <input type="text"
                         className="form-control"
                         placeholder="Tags"
-                        onChange={e => setNewBlogState({ ...newBlogState, tags: e.target.value.split(',') })}
+                        onChange={e => setNewBlogState({ ...newBlogState, tags: e.target.value })}
                         required />
                 </div>
                 <button className="article-button" onClick={btnCreateArticleHandler}>Create Article</button>

@@ -32,7 +32,8 @@
 } else {
     try {
 
-        $commentSelect = $conn -> query("SELECT * FROM `comments`");
+        $commentSelect = $conn -> prepare("SELECT * FROM `comments` WHERE `blogid`=:blogid");
+        $commentSelect -> bindValue( ":blogid", $blogid, PDO::PARAM_STR );
         $commentSelect -> execute();
 
         if( $commentSelect -> rowCount() >= 1 ) {
@@ -44,7 +45,7 @@
 
           $outputMsg = msg( 1, 201, "Successfully retrieved Comments." );
 
-          $outputMsg['commentList'] = $Commentlist;
+          $outputMsg['commentlist'] = $Commentlist;
 
         } else {
             $outputMsg = msg( 0, 422, "Error: No Commets to display." );
@@ -57,5 +58,7 @@
 }
 
 echo json_encode( $outputMsg );
+
+
 
 ?>
