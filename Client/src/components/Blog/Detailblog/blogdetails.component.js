@@ -24,16 +24,16 @@ function BlogDetails() {
     }, [commentList])
 
     const fetchListOfComments = async () => {
-        axios.get('http://localhost/COMP440/Server/Classes/getComments.php', { blogid: 8 })
+        axios.post('http://localhost/COMP440/Server/Classes/getComments.php', { blogid: 8 })
             .then((response) => {
-                console.log('response', response)
                 //API call
-                // const data = response.data
-                // if (data['Is Success'] === 0) {
-                //     alert(data['Message'])
-                // } else {
-                //     setBlogState(response.data['blogslist'])
-                // }
+                const data = response.data
+                if (data['Is Success'] === 0) {
+                    alert(data['Message'])
+                } else {
+                    console.log('comment', data.commentlist)
+                    setCommentList(data.commentlist)
+                }
             }).catch(error => {
                 console.log('error', error)
             })
@@ -71,29 +71,17 @@ function BlogDetails() {
                 <table className="table table-striped">
                     {/* //setup for loop here */}
                     <tbody>
-                        <tr>
-                            <td>
-                                <ListBlog />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <ListBlog />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <ListBlog />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <ListBlog />
-                            </td>
-                        </tr>
-
-
-
+                        {
+                            commentList && commentList.map((comment, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td>
+                                            <ListBlog subject={comment.sentiment} description={comment.description} />
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                        }
                     </tbody>
                 </table>
             </div>
