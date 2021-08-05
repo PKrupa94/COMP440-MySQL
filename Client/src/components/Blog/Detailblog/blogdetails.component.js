@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import './blogdetails.css'
 import { BiCommentAdd } from 'react-icons/bi'
@@ -13,6 +13,32 @@ function BlogDetails() {
         sentiment: 'Positive'
     })
 
+    const [commentList, setCommentList] = useState([{}])
+
+    useEffect(() => {
+        fetchListOfComments();
+    }, [])
+
+    useEffect(() => {
+        console.log(commentList)
+    }, [commentList])
+
+    const fetchListOfComments = async () => {
+        axios.get('http://localhost/COMP440/Server/Classes/getComments.php', { blogid: 8 })
+            .then((response) => {
+                console.log('response', response)
+                //API call
+                // const data = response.data
+                // if (data['Is Success'] === 0) {
+                //     alert(data['Message'])
+                // } else {
+                //     setBlogState(response.data['blogslist'])
+                // }
+            }).catch(error => {
+                console.log('error', error)
+            })
+    }
+
     const btnAddCommentHandler = () => {
         setShowCommentBox(true)
         if (isShowCommentBox) {
@@ -20,14 +46,16 @@ function BlogDetails() {
             console.log(commentstate)
             //add API Call here
 
-            // axios.post('', {
-            //     sentiment: commentstate.sentiment,
-            //     description: commentstate.commentDescription,
-            // }).then(response => {
-            //     console.log('response', response)
-            // }).catch(error => {
-            //     console.log('error', error)
-            // })
+            axios.post('', {
+                sentiment: commentstate.sentiment,
+                description: commentstate.commentDescription,
+                blogid: '',
+                posted_by: ''
+            }).then(response => {
+                console.log('response', response)
+            }).catch(error => {
+                console.log('error', error)
+            })
         }
     }
 
