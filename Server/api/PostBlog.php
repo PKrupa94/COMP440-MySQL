@@ -61,9 +61,9 @@
           $insertBlog -> execute();
 
           $blogID = $conn -> query( "SELECT `blogid` FROM `blogs`
-                                     WHERE `subject` = '$subject'
-                                        AND `description` = '$description'
-                                        AND `userid` = '$userid'" );
+                                     WHERE `subject`     = '$subject'
+                                       AND `description` = '$description'
+                                       AND `userid`      = '$userid'" );
           $blogID -> execute();
           $blogID = $blogID -> fetch( PDO::FETCH_ASSOC );
           $arrBlogID = $blogID;
