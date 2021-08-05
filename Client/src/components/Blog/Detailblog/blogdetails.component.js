@@ -4,26 +4,28 @@ import './blogdetails.css'
 import { BiCommentAdd } from 'react-icons/bi'
 import ListBlog from '../ListBlog/listblog.component'
 
-function BlogDetails() {
+function BlogDetails(props) {
 
     const [isShowCommentBox, setShowCommentBox] = useState(false)
-    // const [reviewTypeState, setReviewTypeState] = useState('Positive')
     const [commentstate, setCommentState] = useState({
         commentDescription: '',
         sentiment: 'Positive'
     })
-
     const [commentList, setCommentList] = useState([{}])
+
 
     useEffect(() => {
         fetchListOfComments();
+        return () => {
+            setCommentList([{}]);
+        };
     }, [])
 
     useEffect(() => {
         console.log(commentList)
     }, [commentList])
 
-    const fetchListOfComments = async () => {
+    const fetchListOfComments = () => {
         axios.post('http://localhost/COMP440/Server/Classes/getComments.php', { blogid: 8 })
             .then((response) => {
                 //API call
@@ -61,10 +63,9 @@ function BlogDetails() {
 
     return (
         <div className="detail-blog-bg">
-            <h1>blog details</h1>
+            <h1>{props.location.state.subject}</h1>
             <hr />
-            <p>These courses are open to anyone meeting the minimum requirements for the relevant level.
-                The six Introductory courses released previously continue to be available for anyone at the Beginners level who has completed at least Level 4 of the Achievement Tasks in the Newcomers Community.</p>
+            <p>{props.location.state.description}</p>
             <hr />
             <div className="scrollit comment-list">
                 <h4>Comments</h4>

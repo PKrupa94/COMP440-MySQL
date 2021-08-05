@@ -11,13 +11,16 @@ function Dashboard(props) {
 
     useEffect(() => {
         fetchBlogs();
+        return () => {
+            setBlogState([{}]);
+        };
     }, [])
 
     useEffect(() => {
         console.log(blogState)
     }, [blogState])
 
-    const fetchBlogs = async () => {
+    const fetchBlogs = () => {
         axios.get('http://localhost/COMP440/Server/api/GetBlogs.php')
             .then((response) => {
                 //API call
@@ -33,13 +36,12 @@ function Dashboard(props) {
     }
 
 
+    const blogClickHandler = (subject, description) => {
+        props.history.push('/detailblog', { subject: subject, description: description })
+    }
 
     if (sessionStorage.getItem('isUserLogin') === null) {
         return <Redirect to="/sign-in" />;
-    }
-
-    const blogClickHandler = () => {
-        props.history.push('/detailblog')
     }
 
     return (
@@ -54,7 +56,7 @@ function Dashboard(props) {
                             blogState && blogState.map((blog, index) => {
                                 return (
                                     <tr key={index}>
-                                        <td onClick={blogClickHandler}>
+                                        <td onClick={() => blogClickHandler(blog.subject, blog.description)}>
                                             <ListBlog subject={blog.subject} description={blog.description} />
                                         </td>
                                     </tr>

@@ -17,14 +17,11 @@ function Login(props) {
 
     const signInHandler = (event) => {
         event.preventDefault();
-
-        //Need to change url
         axios.post('http://localhost/COMP440/Server/api/Login.php', {
             username: state.userName,
             password: state.password
         }).then(response => {
             const data = response['data']
-            console.log('data', data)
             if (data['Is Success'] === 0) {
                 setValidationError({
                     isError: true,
@@ -32,7 +29,7 @@ function Login(props) {
                 })
             } else {
                 context.onLogin(data['userid'])
-                props.history.push('/', { username: data['username'] })
+                props.history.push('/home', { username: state.userName })
             }
         }).catch(error => {
             console.log(error)
@@ -63,16 +60,7 @@ function Login(props) {
                         onChange={e => setLoginState({ ...state, password: e.target.value })}
                     />
                 </div>
-                {/* <div className="form-group mb-3">
-                    <div className="custom-control custom-checkbox">
-                        <input type="checkbox" className="custom-control-input" id="customCheck1" />
-                        <label className="custom-control-label" htmlFor="customCheck1">Remember me</label>
-                    </div>
-                </div> */}
                 <button type="submit" className="btn btn-primary btn-block button_custom">Sign In</button>
-                {/* <p className="forgot-password text-right">
-                    Forgot <a href="#">password?</a>
-                </p> */}
                 <p className="forgot-password text-right">
                     Create New Account <a href="/sign-up">sign up?</a>
                 </p>
