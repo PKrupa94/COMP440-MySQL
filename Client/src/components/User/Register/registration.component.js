@@ -50,7 +50,7 @@ function Signup(props) {
                         message: data['Message']
                     })
                 } else {
-                    context.onLogin()
+                    context.onLogin(data['userid'])
                     props.history.push('/', { username: state.userName })
                 }
             }).catch(error => {

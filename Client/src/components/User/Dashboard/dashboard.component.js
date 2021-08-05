@@ -51,9 +51,9 @@ function Dashboard(props) {
                     {/* //setup for loop here */}
                     <tbody>
                         {
-                            blogState && blogState.map(blog => {
+                            blogState && blogState.map((blog, index) => {
                                 return (
-                                    <tr>
+                                    <tr key={index}>
                                         <td onClick={blogClickHandler}>
                                             <ListBlog subject={blog.subject} description={blog.description} />
                                         </td>

@@ -19,11 +19,12 @@ function CreateNewBlog(props) {
         console.log('subject', newBlogState.subject)
         console.log('description', newBlogState.description)
         console.log('tags', newBlogState.tags)
-        //setup api call
+
         axios.post('http://localhost/COMP440/Server/api/PostBlog.php', {
             subject: newBlogState.subject,
             description: newBlogState.description,
-            tags: newBlogState.tags
+            tags: newBlogState.tags,
+            userid: sessionStorage.getItem('userId')
         }).then(response => {
             const data = response['data']
             console.log('data', data)
@@ -32,14 +33,11 @@ function CreateNewBlog(props) {
             } else {
                 setSuccess(true)
             }
-
         }).catch(error => {
             console.log('error', error)
         })
 
     }
-
-
 
     return (
         <div className="blog-alert-success">

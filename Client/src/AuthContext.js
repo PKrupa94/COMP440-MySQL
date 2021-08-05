@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 
+
 const AuthContext = React.createContext({
     isLoggedIn: false,
     onLogout: () => { },
-    onLogin: () => { }
+    onLogin: (userId) => { },
+
 })
 
 export const AuthContextProvider = (props) => {
@@ -17,14 +19,17 @@ export const AuthContextProvider = (props) => {
         }
     }, [])
 
-    const logInHandler = () => {
+    const logInHandler = (userId) => {
         sessionStorage.setItem('isUserLogin', '1')
+        sessionStorage.setItem('userId', userId)
         setLoggedIn(true)
     }
 
     const logoutHandler = () => {
         sessionStorage.removeItem('isUserLogin')
+        sessionStorage.removeItem('userId')
         setLoggedIn(false)
+        window.location.reload()
     }
 
     return <AuthContext.Provider value={{

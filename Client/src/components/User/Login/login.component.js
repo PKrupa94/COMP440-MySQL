@@ -31,7 +31,7 @@ function Login(props) {
                     message: data['Message']
                 })
             } else {
-                context.onLogin()
+                context.onLogin(data['userid'])
                 props.history.push('/', { username: data['username'] })
             }
         }).catch(error => {
