@@ -25,6 +25,7 @@ function Dashboard(props) {
             .then((response) => {
                 //API call
                 const data = response.data
+                console.log('blog data', data)
                 if (data['Is Success'] === 0) {
                     alert(data['Message'])
                 } else {
@@ -36,8 +37,8 @@ function Dashboard(props) {
     }
 
 
-    const blogClickHandler = (subject, description, blogid) => {
-        props.history.push('/detailblog', { subject: subject, description: description, blogid: blogid })
+    const blogClickHandler = (subject, description, blogid, userid) => {
+        props.history.push('/detailblog', { subject: subject, description: description, blogid: blogid, userid: userid })
     }
 
     if (sessionStorage.getItem('isUserLogin') === null) {
@@ -56,7 +57,7 @@ function Dashboard(props) {
                             blogState && blogState.map((blog, index) => {
                                 return (
                                     <tr key={index}>
-                                        <td onClick={() => blogClickHandler(blog.subject, blog.description, blog.blogid)}>
+                                        <td onClick={() => blogClickHandler(blog.subject, blog.description, blog.blogid, blog.userid)}>
                                             <ListBlog subject={blog.subject} description={blog.description} />
                                         </td>
                                     </tr>

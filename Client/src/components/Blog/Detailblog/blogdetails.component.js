@@ -92,7 +92,10 @@ function BlogDetails(props) {
                         </tbody>
                     </table>
                 </div>
-                <button className="blog-button" onClick={() => btnAddCommentHandler()}>Add Comment <BiCommentAdd /></button>
+                {
+                    props.location.state.userid === sessionStorage.getItem("userId") ? null :
+                        <button className="blog-button" onClick={() => btnAddCommentHandler()}>Add Comment <BiCommentAdd /></button>
+                }
                 {isShowCommentBox ?
                     <div className="comment-blog-bg">
                         <div className="form-check form-check-inline">

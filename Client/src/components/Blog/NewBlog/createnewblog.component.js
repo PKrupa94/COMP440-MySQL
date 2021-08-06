@@ -19,7 +19,7 @@ function CreateNewBlog(props) {
         console.log('subject', newBlogState.subject)
         console.log('description', newBlogState.description)
         console.log('tags', newBlogState.tags)
-
+        console.log('userId', sessionStorage.getItem('userId'))
         axios.post('http://localhost/COMP440/Server/api/PostBlog.php', {
             subject: newBlogState.subject,
             description: newBlogState.description,
