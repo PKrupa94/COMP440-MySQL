@@ -51,7 +51,7 @@ function Signup(props) {
                     })
                 } else {
                     context.onLogin(data['userid'])
-                    props.history.push('/home', { username: state.userName })
+                    props.history.push('/', { username: state.userName })
                 }
             }).catch(error => {
                 console.log(error)

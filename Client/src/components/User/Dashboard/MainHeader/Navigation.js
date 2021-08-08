@@ -6,16 +6,18 @@ import classes from './Navigation.module.css';
 
 const Navigation = () => {
   const ctxt = useContext(AuthContext)
-  const [stateDatabaseInitialize, setDatabaseInitialize] = useState('false')
 
   const initDatabaseHandler = () => {
-    // <Alert message="Database is successfully Initialize" />
-    //need to set up api call
-    // axios.get('').then(response => {
-
-    // }).catch(error => {
-
-    // })
+    // need to set up api call
+    axios.get('http://localhost/COMP440/Server/api/initDatabase.php').then(response => {
+      console.log('response', response)
+      const data = response['data']
+      if (data['Is Success'] === 1) {
+        alert(data['Message'])
+      }
+    }).catch(error => {
+      console.log('error', error)
+    })
 
 
     console.log('button click')
@@ -31,7 +33,6 @@ const Navigation = () => {
         )}
         {ctxt.isLoggedIn && (
           <li>
-            {/* <a href="/">Initialize  Database</a> */}
             <button onClick={initDatabaseHandler}>Initialize  Database</button>
           </li>
         )}

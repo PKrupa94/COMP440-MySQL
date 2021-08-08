@@ -23,52 +23,44 @@ $outputMsg = [];
   }
 
     try{
-
       $conn = @new mysqli($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASSWORD, $DATABASE_NAME);
-
       if ($conn -> connect_errno) {
           echo "Failed to connect to MySQL: " . $conn->connect_errno;
           echo "<br/>Error: " . $conn->connect_error;
       }
-
     } catch( Exception $e ) {
-
-        echo "test";
         $outputMsg = msg( 0, 500, $e -> getMessage() );
         exit;
     }
     
 
   if( $_SERVER[ "REQUEST_METHOD" ] != "GET" ) {
-
       $outputMsg = msg( 0, 404, "Error: Page Not Found." );
   } else {
-
       $query = file("DBProject_Summer2021-1.sql");
-
       $templine = '';
-
       foreach ($query as $line) {
           if (substr($line, 0, 2) == '--' || $line == '')
               continue;
-
           $templine .= $line;
           if (substr(trim($line), -1, 1) == ';') {
-              $conn -> query($templine) or print('Error performing query \'<strong>' . $templine . '\': ' . $conn->error . '<br /><br />');
+              // $conn -> query($templine);
+              $conn->query($templine);
+              $outputMsg = msg( 1, 200, "Database initialization successfully done!!" );  
               $templine = '';
           }
       }
 
-      $stmt = $conn -> prepare($query);
+      // $stmt = $conn -> prepare($query);
 
-      if ( $stmt -> execute() ) {
-
-          $outputMsg = msg( 0, 200, "Success" );
-      } else {
-
-          $outputMsg = msg( 0, 422, "Failure" );
-      }
-
+      // echo 'prepare done';
+      // if ( $stmt -> execute() ) {
+      //   echo 'success';
+      //   // $outputMsg = msg( 0, 200, "Success" );
+      // } else {
+      //   echo 'failure';
+      //   // $outputMsg = msg( 0, 422, "Failure" );
+      // }
   }
 
   echo json_encode( $outputMsg );
