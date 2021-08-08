@@ -7,14 +7,14 @@ import Alert from '../../Alert/alert.component'
 
 function BlogDetails(props) {
 
-    const [isShowCommentBox, setShowCommentBox] = useState(false)
-    const [isUserCommented, setUserCommented] = useState(false)
+    const [isShowCommentBox, setShowCommentBox] = useState(false) //show comment button
+    const [isUserCommented, setUserCommented] = useState(false) //for use can not add more than one comment
 
     const [commentstate, setCommentState] = useState({
         commentDescription: '',
         sentiment: 'Positive'
-    })
-    const [commentList, setCommentList] = useState([{}])
+    }) // store comment data for api call
+    const [commentList, setCommentList] = useState([{}]) // store data from API
     const [isSuccess, setSuccess] = useState(false)
 
     useEffect(() => {
