@@ -8,6 +8,8 @@ import Alert from '../../Alert/alert.component'
 function BlogDetails(props) {
 
     const [isShowCommentBox, setShowCommentBox] = useState(false)
+    const [isUserCommented, setUserCommented] = useState(false)
+
     const [commentstate, setCommentState] = useState({
         commentDescription: '',
         sentiment: 'Positive'
@@ -37,10 +39,24 @@ function BlogDetails(props) {
                 } else {
                     console.log('comment', data.commentlist)
                     setCommentList(data.commentlist)
+                    isUserAlredyCommented(data.commentlist)
                 }
             }).catch(error => {
                 console.log('error', error)
             })
+    }
+
+    const isUserAlredyCommented = (data) => {
+        const userId = sessionStorage.getItem('userId')
+        for (var key in data) {
+            console.log('key', data[key]['authorid'])
+            if (userId === data[key]['authorid']) {
+                setUserCommented(true)
+                return
+            }
+        }
+
+
     }
 
     const btnAddCommentHandler = () => {
@@ -93,7 +109,7 @@ function BlogDetails(props) {
                     </table>
                 </div>
                 {
-                    props.location.state.userid === sessionStorage.getItem("userId") ? null :
+                    props.location.state.userid === sessionStorage.getItem("userId") || isUserCommented ? null :
                         <button className="blog-button" onClick={() => btnAddCommentHandler()}>Add Comment <BiCommentAdd /></button>
                 }
                 {isShowCommentBox ?
