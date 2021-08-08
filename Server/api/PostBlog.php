@@ -49,7 +49,20 @@
 
       try {
 
+
           $tagsArr = preg_split("/\,/", $tags);
+
+          $blogCount = $conn -> query( "SELECT * FROM `blogs`
+                                          WHERE `userid` = '$userid'
+                                          AND DATE(`pdate`) = CURDATE()" );
+          $blogCount -> execute();
+
+          if($blogCount -> rowCount() >= 2) {
+
+            $outputMsg = msg( 0, 422, "Error: You have exceeded posting limits, please try again in 24 hours." );
+            echo json_encode( $outputMsg );
+            exit;
+          }
 
           $insertBlog = $conn -> prepare( "INSERT INTO `blogs`(`userid`,`subject`, `description`)
                                                         VALUES(:userid, :subject, :description)" );
