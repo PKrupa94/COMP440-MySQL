@@ -33,10 +33,10 @@
       try {
 
           $blogselect = $conn -> prepare( "SELECT `blogs`.*, `blogstags`.*
-                                         FROM `blogs`
-                                         INNER JOIN `blogstags`
-                                         ON `blogs`.blogid = `blogstags`.blogid
-                                         WHERE `blogstags`.tag = :inputTag" );
+                                           FROM `blogs`
+                                           INNER JOIN `blogstags`
+                                           ON `blogs`.blogid = `blogstags`.blogid
+                                           WHERE `blogstags`.tag = :inputTag" );
           $blogselect -> bindValue( ":inputTag" , $inputTag , PDO::PARAM_STR );
           $blogselect -> execute();
 
