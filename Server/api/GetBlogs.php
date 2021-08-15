@@ -27,7 +27,7 @@
   } else {
       try {
 
-          $blogselect = $conn -> query( "SELECT * FROM `blogs`" );
+          $blogselect = $conn -> query( "SELECT * FROM `blogs` ORDER BY `pdate` DESC" );
           $blogselect -> execute();
 
           if( $blogselect -> rowCount() >= 1 ) {

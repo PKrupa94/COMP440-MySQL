@@ -27,7 +27,7 @@
     ], $optional );
   }
 
-  if( $_SERVER[ "REQUEST_METHOD" ] != "GET" ) {
+  if( $_SERVER[ "REQUEST_METHOD" ] != "POST" ) {
       $outputMsg = msg( 0, 404, "Error: Page Not Found." );
   } else {
       try {

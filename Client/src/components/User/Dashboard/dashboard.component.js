@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import MainHeader from './MainHeader/MainHeader'
@@ -10,6 +10,7 @@ import './dashboard.css'
 function Dashboard(props) {
 
     const [blogState, setBlogState] = useState([{}])
+    const tagRef = useRef();
 
     useEffect(() => {
         fetchBlogs();
@@ -43,23 +44,25 @@ function Dashboard(props) {
         props.history.push('/detailblog', { subject: subject, description: description, blogid: blogid, userid: userid })
     }
 
-    const searchBtnHandler = (tag) => {
+    const searchBtnHandler = () => {
         //Need to change url
+        console.log('tag', typeof (tagRef.current.value))
         console.log('search btn click')
-        // axios.post('', {
-        //     tag: tag,
-        // }).then(response => {
-        //     const data = response.data
-        //     console.log('blog data', data)
-        //     if (data['Is Success'] === 0) {
-        //         alert(data['Message'])
-        //     } else {
-        //         setBlogState(response.data['blogslist'])
-        //     }
+        axios.post('http://localhost/COMP440/Server/api/GetBlogsWithTagX.php', {
+            inputTag: tagRef.current.value,
+        }).then(response => {
+            const data = response.data
+            console.log('blog data', data)
+            if (data['Is Success'] === 0) {
+                alert(data['Message'])
+            } else {
+                console.log(response.data['blogslist'])
+                setBlogState(response.data['blogslist'])
+            }
 
-        // }).catch(error => {
-        //     console.log('error', error)
-        // })
+        }).catch(error => {
+            console.log('error', error)
+        })
 
     }
 
@@ -72,7 +75,7 @@ function Dashboard(props) {
             <MainHeader />
             <div className="input-group">
                 <div className="form-outline search-box">
-                    <input type="search" id="form1" className="form-control" placeholder="Search" />
+                    <input type="search" id="form1" className="form-control" placeholder="Search" ref={tagRef} />
                     <button type="button" className="search-button" onClick={searchBtnHandler}>
                         <BiSearch />
                     </button>
