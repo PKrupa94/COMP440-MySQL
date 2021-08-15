@@ -7,6 +7,9 @@ import SignUp from './components/User/Register/registration.component'
 import Dashboard from './components/User/Dashboard/dashboard.component'
 import CreateNewBlog from './components/Blog/NewBlog/createnewblog.component'
 import BlogDetail from './components/Blog/Detailblog/blogdetails.component'
+import ListUserBlog from './components/Blog/Ownblog/listuserblog.controller'
+import ListFollowers from './components/User/Follower/followerlist.controller'
+import UsersList from './components/User/UsersList/userslist.controller'
 
 function App() {
 
@@ -20,6 +23,9 @@ function App() {
             <Route path="/sign-up" component={SignUp} />
             <Route path='/newblog' component={CreateNewBlog} />
             <Route path='/detailblog' component={BlogDetail} />
+            <Route path='/myblog' component={ListUserBlog} />
+            <Route path='/followers' component={ListFollowers} />
+            <Route path='/userslist' component={UsersList} />
           </Switch>
         </div>
       </div>

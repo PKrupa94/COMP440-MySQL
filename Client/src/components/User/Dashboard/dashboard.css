@@ -16,3 +16,22 @@ padding: 40px 55px 45px 55px;
 border-radius: 15px;
 transition: all .3s;
 }
+
+.search-box{
+    display: flex;
+    flex-direction: row;
+    width: 500px;
+    margin: auto;
+}
+
+.search-button {
+    font: inherit;
+    font-weight: bold;
+    background: linear-gradient(to top right,#fc2c77 0%,#6c4079 100%);
+    border: 1px solid #dd0db0;
+    padding: 0.5rem 1.5rem;
+    color: white;
+    /* box-shadow: 0 2px 4px rgb(0 0 0 / 26%); */
+    /* border-radius: 20px; */
+    /* margin-top: 15px;*/
+}

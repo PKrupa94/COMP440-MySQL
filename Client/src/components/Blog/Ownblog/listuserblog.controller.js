@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
-import MainHeader from './MainHeader/MainHeader'
 import ListBlog from '../../Blog/ListBlog/listblog.component'
-import { BiSearch } from 'react-icons/bi'
 
-import './dashboard.css'
 
-function Dashboard(props) {
+function ListOwnBlog(props) {
 
     const [blogState, setBlogState] = useState([{}])
 
     useEffect(() => {
-        fetchBlogs();
+        // fetchUserBlogsPstCommt();
         return () => {
             setBlogState([{}]);
         };
@@ -22,8 +19,9 @@ function Dashboard(props) {
         console.log(blogState)
     }, [blogState])
 
-    const fetchBlogs = () => {
-        axios.get('http://localhost/COMP440/Server/api/GetBlogs.php')
+    const fetchUserBlogsPstCommt = () => {
+        //change url
+        axios.get('')
             .then((response) => {
                 //API call
                 const data = response.data
@@ -43,49 +41,14 @@ function Dashboard(props) {
         props.history.push('/detailblog', { subject: subject, description: description, blogid: blogid, userid: userid })
     }
 
-    const searchBtnHandler = (tag) => {
-        //Need to change url
-        console.log('search btn click')
-        // axios.post('', {
-        //     tag: tag,
-        // }).then(response => {
-        //     const data = response.data
-        //     console.log('blog data', data)
-        //     if (data['Is Success'] === 0) {
-        //         alert(data['Message'])
-        //     } else {
-        //         setBlogState(response.data['blogslist'])
-        //     }
-
-        // }).catch(error => {
-        //     console.log('error', error)
-        // })
-
-    }
-
-    if (sessionStorage.getItem('isUserLogin') === null) {
-        return <Redirect to="/sign-in" />;
-    }
-
     return (
         <div className="list-blog-bg">
-            <MainHeader />
-            <div className="input-group">
-                <div className="form-outline search-box">
-                    <input type="search" id="form1" className="form-control" placeholder="Search" />
-                    <button type="button" className="search-button" onClick={searchBtnHandler}>
-                        <BiSearch />
-                    </button>
-                </div>
-
-            </div>
-            <br />
-            {/* <h3>Welcome {props.location.state.username}!!</h3> */}
             <div className="scrollit">
                 <table className="table table-striped">
                     {/* //setup for loop here */}
                     <tbody>
-                        {
+                        <h1>Hello</h1>
+                        {/* {
                             blogState && blogState.map((blog, index) => {
                                 return (
                                     <tr key={index}>
@@ -95,13 +58,12 @@ function Dashboard(props) {
                                     </tr>
                                 )
                             })
-                        }
+                        } */}
                     </tbody>
                 </table>
             </div>
-
         </div>
     )
 }
 
-export default Dashboard;
+export default ListOwnBlog;

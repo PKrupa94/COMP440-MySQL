@@ -33,14 +33,31 @@ const Navigation = () => {
         )}
         {ctxt.isLoggedIn && (
           <li>
+            <a href="/myblog">My Blogs</a>
+          </li>
+        )}
+        {ctxt.isLoggedIn && (
+          <li>
+            <a href="/followers">Followers</a>
+          </li>
+        )}
+        {ctxt.isLoggedIn && (
+          <li>
+            <a href="/userslist">UsersList</a>
+          </li>
+        )}
+        {ctxt.isLoggedIn && (
+          <li>
             <button onClick={initDatabaseHandler}>Initialize  Database</button>
           </li>
         )}
+
         {ctxt.isLoggedIn && (
           <li>
             <button onClick={ctxt.onLogout}>Logout</button>
           </li>
         )}
+
       </ul>
     </nav>
   )
