@@ -9,8 +9,24 @@ function Followers() {
         username2: ''
     })
 
-    const getFollowerHandler = () => {
-        console.log('button click')
+    const [arrUserState, setArrUserState] = useState([])
+
+    const getFollowerHandler = (event) => {
+        event.preventDefault()
+        axios.post('http://localhost/COMP440/Server/api/GetFollowers.php', {
+            username1: usernameState.username1,
+            username2: usernameState.username2
+        }).then((response) => {
+            const data = response.data
+            console.log('userlist', data['userlist'])
+            if (data['Is Success'] === 0) {
+                alert(data['Message'])
+            } else {
+                setArrUserState(data['userlist'])
+            }
+        }).catch(error => {
+            console.log('error', error)
+        })
     }
 
     return (
@@ -34,33 +50,25 @@ function Followers() {
                 </div>
                 <button type="submit"
                     className="article-button"
-                    onClick={() => getFollowerHandler}>Get Followers</button>
+                    onClick={getFollowerHandler}>Get Followers</button>
             </form>
             <div className="scrollit comment-list">
                 <h3>Followers</h3>
                 <table className="table table-striped">
                     <tbody>
-                        <tr>
-                            <td>
-                                <div className="card-header">
-                                    Username
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div className="card-header">
-                                    Username
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div className="card-header">
-                                    Username
-                                </div>
-                            </td>
-                        </tr>
+                        {
+                            arrUserState && arrUserState.map((user, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td>
+                                            <div className="card-header">
+                                                {user.username}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                        }
                     </tbody>
                 </table>
             </div>

@@ -28,11 +28,9 @@
   }
 
   if( $_SERVER[ "REQUEST_METHOD" ] != "POST" ) {
-
       $outputMsg = msg( 0, 404, "Error: Page Not Found." );
   } else {
       try {
-
           $blogselect = $conn -> prepare( "SELECT *
                                            FROM(
                                                   SELECT `blogs`.userid, COUNT(*) AS blogcount,
@@ -45,32 +43,30 @@
 
           $blogselect -> bindValue( ":pdate" , $pdate , PDO::PARAM_STR );
           $blogselect -> execute();
-
+  
           if( $blogselect -> rowCount() >= 1 ) {
-
+            
             while( $row = $blogselect -> fetch( PDO::FETCH_ASSOC ) ) {
 
                 $userlist[] = $row;
             }
-
+            
             $outputMsg = msg( 1, 201, "Successfully retrieved users who posted most blogs on: $pdate." );
-
+            // echo($outputMsg);
             for( $i = 0; $i < sizeof($userlist); $i++ ) {
-
               $userid = $userlist[$i]['userid'];
-
+              
               $userselect = $conn -> prepare( "SELECT `users`.userid, `users`.firstname,
                                                       `users`.lastname, `users`.username, `users`.email
                                                FROM `users`
                                                WHERE `users`.userid = :userid" );
               $userselect -> bindValue( ":userid", $userid, PDO::PARAM_STR );
               $userselect -> execute();
-
+              
               $rowValues = $userselect -> fetch( PDO::FETCH_ASSOC );
-
               $userlist[$i] += $rowValues;
+              
             }
-
             $outputMsg['userlist'] = $userlist;
 
           } else {
