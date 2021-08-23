@@ -7,9 +7,10 @@ import ListBlog from '../../Blog/ListBlog/listblog.component'
 function ListOwnBlog(props) {
 
     const [blogState, setBlogState] = useState([{}])
+    const [isBlog, setBlogEmpty] = useState(false)
 
     useEffect(() => {
-        // fetchUserBlogsPstCommt();
+        fetchUserBlogsPstCommt();
         return () => {
             setBlogState([{}]);
         };
@@ -21,19 +22,23 @@ function ListOwnBlog(props) {
 
     const fetchUserBlogsPstCommt = () => {
         //change url
-        axios.get('')
-            .then((response) => {
-                //API call
-                const data = response.data
-                console.log('blog data', data)
-                if (data['Is Success'] === 0) {
-                    alert(data['Message'])
-                } else {
-                    setBlogState(response.data['blogslist'])
-                }
-            }).catch(error => {
-                console.log('error', error)
-            })
+        axios.post('http://localhost/COMP440/Server/api/GetBlogWithPositiveCmt.php', {
+            userId: sessionStorage.getItem('userId')
+        }).then((response) => {
+            //API call
+            const data = response.data
+            console.log('blog data', data)
+            console.log('blog datadfdffsfs', data['bloglist'])
+            if (data['Is Success'] === 0) {
+                alert(data['Message'])
+                setBlogEmpty(true)
+            } else {
+                setBlogState(response.data['bloglist'])
+                setBlogEmpty(false)
+            }
+        }).catch(error => {
+            console.log('error', error)
+        })
     }
 
 
@@ -44,23 +49,24 @@ function ListOwnBlog(props) {
     return (
         <div className="list-blog-bg">
             <div className="scrollit">
-                <table className="table table-striped">
-                    {/* //setup for loop here */}
-                    <tbody>
-                        <h1>Hello</h1>
-                        {/* {
-                            blogState && blogState.map((blog, index) => {
-                                return (
-                                    <tr key={index}>
-                                        <td onClick={() => blogClickHandler(blog.subject, blog.description, blog.blogid, blog.userid)}>
-                                            <ListBlog subject={blog.subject} description={blog.description} />
-                                        </td>
-                                    </tr>
-                                )
-                            })
-                        } */}
-                    </tbody>
-                </table>
+                {
+                    isBlog ? <h4>No Blogs to Display</h4> :
+                        <table className="table table-striped">
+                            <tbody>
+                                {
+                                    blogState && blogState.map((blog, index) => {
+                                        return (
+                                            <tr key={index}>
+                                                <td onClick={() => blogClickHandler(blog.subject, blog.description, blog.blogid, blog.userid)}>
+                                                    <ListBlog subject={blog.subject} description={blog.description} />
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                }
+                            </tbody>
+                        </table>
+                }
             </div>
         </div>
     )

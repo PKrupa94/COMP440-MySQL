@@ -9,9 +9,9 @@ function UsersList() {
     const [isUserFromSearch, setUserFromSearch] = useState(false)
 
     useEffect(() => {
-        // fetchUsersNoComment();
+        fetchUsersNoComment();
         return () => {
-            // setuserListState([]);
+            setuserListState([]);
         };
     }, [])
 
@@ -20,7 +20,7 @@ function UsersList() {
     }, [userListState])
 
     const fetchUsersNoComment = () => {
-        axios.post('')
+        axios.get('http://localhost/COMP440/Server/api/GetUserWithNoComments.php')
             .then((response) => {
                 //API call
                 const data = response.data
@@ -73,7 +73,7 @@ function UsersList() {
                 <table className="table table-striped">
                     <tbody>
                         {
-                            isUserFromSearch && userListState && userListState.map((user, index) => {
+                            userListState && userListState.map((user, index) => {
                                 return (
                                     <tr key={index}>
                                         <td>
@@ -85,8 +85,6 @@ function UsersList() {
                                 )
                             })
                         }
-
-
                     </tbody>
                 </table>
             </div>

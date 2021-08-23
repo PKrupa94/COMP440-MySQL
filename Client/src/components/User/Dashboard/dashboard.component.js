@@ -4,11 +4,9 @@ import { Redirect } from 'react-router-dom';
 import MainHeader from './MainHeader/MainHeader'
 import ListBlog from '../../Blog/ListBlog/listblog.component'
 import { BiSearch } from 'react-icons/bi'
-
 import './dashboard.css'
 
 function Dashboard(props) {
-
     const [blogState, setBlogState] = useState([{}])
     const tagRef = useRef();
 
@@ -39,7 +37,6 @@ function Dashboard(props) {
             })
     }
 
-
     const blogClickHandler = (subject, description, blogid, userid) => {
         props.history.push('/detailblog', { subject: subject, description: description, blogid: blogid, userid: userid })
     }
@@ -59,7 +56,6 @@ function Dashboard(props) {
                 console.log(response.data['blogslist'])
                 setBlogState(response.data['blogslist'])
             }
-
         }).catch(error => {
             console.log('error', error)
         })
